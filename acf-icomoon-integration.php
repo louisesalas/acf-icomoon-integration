@@ -30,6 +30,46 @@ define( 'ACF_ICOMOON_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'ACF_ICOMOON_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
 /**
+ * Check if ACF is installed and active
+ *
+ * @return bool
+ */
+function acf_icomoon_is_acf_active(): bool {
+    // Check if ACF function exists (works for both ACF Pro and free)
+    if ( function_exists( 'acf' ) || class_exists( 'ACF' ) ) {
+        return true;
+    }
+
+    // Fallback: Check if ACF plugin is active
+    if ( ! function_exists( 'is_plugin_active' ) ) {
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
+    }
+
+    return is_plugin_active( 'advanced-custom-fields-pro/acf.php' ) 
+        || is_plugin_active( 'advanced-custom-fields/acf.php' );
+}
+
+/**
+ * Display admin notice if ACF is not installed
+ *
+ * @return void
+ */
+function acf_icomoon_admin_notice_missing_acf(): void {
+    if ( ! is_admin() ) {
+        return;
+    }
+
+    $class = 'notice notice-error is-dismissible';
+    $message = sprintf(
+        /* translators: %s: Plugin name */
+        __( 'The plugin "%s" requires Advanced Custom Fields (ACF) to be installed and activated. Please install and activate ACF to use this plugin.', 'acf-icomoon' ),
+        __( 'ACF IcoMoon Integration', 'acf-icomoon' )
+    );
+
+    printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
+}
+
+/**
  * Main plugin class
  * 
  * Handles initialization and loading of all plugin components.
@@ -159,6 +199,16 @@ final class ACF_IcoMoon_Integration {
      * @return void
      */
     public function activate(): void {
+        // Check if ACF is active before activating
+        if ( ! acf_icomoon_is_acf_active() ) {
+            deactivate_plugins( ACF_ICOMOON_PLUGIN_BASENAME );
+            wp_die(
+                esc_html__( 'This plugin requires Advanced Custom Fields (ACF) to be installed and activated.', 'acf-icomoon' ),
+                esc_html__( 'Plugin Activation Error', 'acf-icomoon' ),
+                array( 'back_link' => true )
+            );
+        }
+
         // Set default options
         if ( false === get_option( 'acf_icomoon_icons' ) ) {
             add_option( 'acf_icomoon_icons', array() );
@@ -188,13 +238,20 @@ final class ACF_IcoMoon_Integration {
 /**
  * Initialize the plugin
  *
- * @return ACF_IcoMoon_Integration
+ * @return ACF_IcoMoon_Integration|null
  */
-function acf_icomoon(): ACF_IcoMoon_Integration {
+function acf_icomoon(): ?ACF_IcoMoon_Integration {
+    // Check if ACF is active before initializing
+    if ( ! acf_icomoon_is_acf_active() ) {
+        // Add admin notice
+        add_action( 'admin_notices', 'acf_icomoon_admin_notice_missing_acf' );
+        return null;
+    }
+
     return ACF_IcoMoon_Integration::get_instance();
 }
 
-// Start the plugin
+// Start the plugin only if ACF is available
 acf_icomoon();
 
 /**
@@ -205,13 +262,13 @@ acf_icomoon();
  * @return string The SVG HTML
  */
 function icomoon_get_icon( string $icon_name, array $atts = array() ): string {
-    $frontend = acf_icomoon()->frontend;
+    $instance = acf_icomoon();
     
-    if ( $frontend ) {
-        return $frontend->get_icon( $icon_name, $atts );
+    if ( ! $instance || ! $instance->frontend ) {
+        return '';
     }
     
-    return '';
+    return $instance->frontend->get_icon( $icon_name, $atts );
 }
 
 /**
