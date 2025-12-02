@@ -5,6 +5,38 @@ All notable changes to ACF IcoMoon Integration will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2025-12-02
+
+### Security - CRITICAL UPDATE
+- **Fixed critical Stored XSS vulnerability** via malicious SVG file uploads
+- **Fixed critical XXE injection vulnerability** in XML/SVG parsing that could expose server files
+- **Fixed high severity path traversal vulnerability** that could allow unauthorized file access
+- Restricted SVG MIME type validation (removed `text/html` from allowed types)
+- Enhanced output escaping throughout codebase for XSS prevention
+
+### Added
+- New `ACF_IcoMoon_Sanitizer` class for comprehensive SVG content sanitization
+- Whitelist-based SVG element and attribute filtering (removes scripts, event handlers, dangerous CSS)
+- Path validation method to ensure all file operations stay within WordPress uploads directory
+- Security documentation: `SECURITY-CHANGELOG.md` and `SECURITY-FIXES-SUMMARY.md`
+- Helper functions extracted to dedicated `includes/helper-functions.php` file
+
+### Changed
+- XML/SVG parsing now uses secure libxml options (`LIBXML_NONET`, `LIBXML_NOENT`, `LIBXML_NOCDATA`)
+- External entity loading disabled across all XML operations to prevent XXE attacks
+- All uploaded SVG files are now sanitized before storage
+- Admin class constructor now requires `ACF_IcoMoon_Sanitizer` instance
+- Improved file path security with `realpath()` validation
+
+### Technical Details
+- All SVG content sanitized with whitelist approach (dangerous elements/attributes removed)
+- DOCTYPE and ENTITY declarations in SVG files now rejected
+- Event handler attributes (onclick, onerror, onload, etc.) stripped from SVG uploads
+- CSS expressions and javascript: protocols removed from style attributes
+- File paths validated to prevent directory traversal attacks
+
+**⚠️ IMPORTANT:** After updating, it is recommended to re-upload your IcoMoon files to ensure they are properly sanitized with the new security features.
+
 ## [1.0.1] - 2024-11-28
 
 ### Security

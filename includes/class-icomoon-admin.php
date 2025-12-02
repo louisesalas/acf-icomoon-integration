@@ -28,6 +28,13 @@ class ACF_IcoMoon_Admin {
     private ACF_IcoMoon_Parser $parser;
 
     /**
+     * Sanitizer instance
+     *
+     * @var ACF_IcoMoon_Sanitizer
+     */
+    private ACF_IcoMoon_Sanitizer $sanitizer;
+
+    /**
      * Option group name
      *
      * @var string
@@ -44,10 +51,12 @@ class ACF_IcoMoon_Admin {
     /**
      * Constructor
      *
-     * @param ACF_IcoMoon_Parser $parser Parser instance
+     * @param ACF_IcoMoon_Parser     $parser    Parser instance
+     * @param ACF_IcoMoon_Sanitizer  $sanitizer Sanitizer instance
      */
-    public function __construct( ACF_IcoMoon_Parser $parser ) {
+    public function __construct( ACF_IcoMoon_Parser $parser, ACF_IcoMoon_Sanitizer $sanitizer ) {
         $this->parser = $parser;
+        $this->sanitizer = $sanitizer;
         $this->init_hooks();
     }
 
@@ -291,14 +300,56 @@ class ACF_IcoMoon_Admin {
             return;
         }
 
-        // Move uploaded file
-        $target_path = $target_dir . '/sprite.svg';
+        // Validate SVG content before moving
+        $svg_validation = $this->sanitizer->validate_svg_file( $file['tmp_name'] );
         
-        if ( ! move_uploaded_file( $file['tmp_name'], $target_path ) ) {
+        if ( is_wp_error( $svg_validation ) ) {
             add_settings_error(
                 'acf_icomoon',
-                'move_error',
-                __( 'Failed to save the uploaded file.', 'acf-icomoon' ),
+                'svg_validation_error',
+                $svg_validation->get_error_message(),
+                'error'
+            );
+            return;
+        }
+
+        // Read and sanitize the SVG content
+        $svg_content = file_get_contents( $file['tmp_name'] );
+        $sanitized_svg = $this->sanitizer->sanitize_svg( $svg_content );
+        
+        if ( is_wp_error( $sanitized_svg ) ) {
+            add_settings_error(
+                'acf_icomoon',
+                'sanitization_error',
+                $sanitized_svg->get_error_message(),
+                'error'
+            );
+            return;
+        }
+
+        // Write sanitized content to target file
+        $target_path = $target_dir . '/sprite.svg';
+        
+        // Validate target path
+        $path_validation = $this->parser->validate_file_path( $target_path );
+        
+        if ( is_wp_error( $path_validation ) ) {
+            add_settings_error(
+                'acf_icomoon',
+                'path_error',
+                $path_validation->get_error_message(),
+                'error'
+            );
+            return;
+        }
+        
+        $write_result = file_put_contents( $target_path, $sanitized_svg );
+        
+        if ( false === $write_result ) {
+            add_settings_error(
+                'acf_icomoon',
+                'write_error',
+                __( 'Failed to save the sanitized file.', 'acf-icomoon' ),
                 'error'
             );
             return;
@@ -465,7 +516,7 @@ class ACF_IcoMoon_Admin {
                     <table class="acf-icomoon-status-table">
                         <tr>
                             <td><?php esc_html_e( 'Icons Loaded:', 'acf-icomoon' ); ?></td>
-                            <td><strong><?php echo count( $icons ); ?></strong></td>
+                            <td><strong><?php echo esc_html( count( $icons ) ); ?></strong></td>
                         </tr>
                         <tr>
                             <td><?php esc_html_e( 'Sprite URL:', 'acf-icomoon' ); ?></td>
@@ -496,7 +547,7 @@ class ACF_IcoMoon_Admin {
                             printf( 
                                 /* translators: %d: number of icons */
                                 esc_html__( '%d icons', 'acf-icomoon' ), 
-                                count( $icons ) 
+                                esc_html( count( $icons ) )
                             ); 
                             ?>
                         </span>

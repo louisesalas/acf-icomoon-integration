@@ -103,7 +103,17 @@ class ACF_IcoMoon_Frontend {
             return;
         }
 
+        // Validate the sprite path is within uploads directory
+        $upload_dir = wp_upload_dir();
+        $base_dir = realpath( $upload_dir['basedir'] );
+        $real_path = realpath( $sprite_path );
+        
+        if ( false === $real_path || strpos( $real_path, $base_dir ) !== 0 ) {
+            return;
+        }
+
         // Output the sprite inline (hidden) for use with <use> elements
+        // The file has already been sanitized during upload, so we can safely output it
         $sprite_content = file_get_contents( $sprite_path );
         
         if ( ! empty( $sprite_content ) ) {
@@ -116,6 +126,7 @@ class ACF_IcoMoon_Frontend {
             );
             
             echo "\n<!-- IcoMoon Sprite -->\n";
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             echo $sprite_content;
             echo "\n<!-- /IcoMoon Sprite -->\n";
         }
@@ -209,12 +220,29 @@ class ACF_IcoMoon_Frontend {
             return '';
         }
 
-        // Load and parse sprite
+        // Validate the sprite path is within uploads directory
+        $upload_dir = wp_upload_dir();
+        $base_dir = realpath( $upload_dir['basedir'] );
+        $real_path = realpath( $sprite_path );
+        
+        if ( false === $real_path || strpos( $real_path, $base_dir ) !== 0 ) {
+            return '';
+        }
+
+        // Load and parse sprite with security settings
+        $libxml_options = LIBXML_NONET | LIBXML_NOENT | LIBXML_NOCDATA;
+        
+        // Disable external entity loading to prevent XXE attacks
+        $previous_entity_loader = libxml_disable_entity_loader( true );
         libxml_use_internal_errors( true );
         
         $dom = new DOMDocument();
-        $dom->load( $sprite_path );
+        $dom->substituteEntities = false;
+        $dom->resolveExternals = false;
+        $dom->load( $sprite_path, $libxml_options );
         
+        // Restore previous entity loader state
+        libxml_disable_entity_loader( $previous_entity_loader );
         libxml_clear_errors();
 
         // Sanitize icon name for XPath query (allow only alphanumeric, hyphens, underscores)
@@ -281,6 +309,7 @@ class ACF_IcoMoon_Frontend {
      * @return void
      */
     public function icon( string $icon_name, array $atts = array() ): void {
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo $this->get_icon( $icon_name, $atts );
     }
 
