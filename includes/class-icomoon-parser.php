@@ -131,12 +131,20 @@ class ACF_IcoMoon_Parser {
     private function extract_icons_from_sprite( string $content ): array {
         $icons = array();
 
-        // Use DOMDocument to parse SVG
+        // Use DOMDocument to parse SVG with security settings
+        $libxml_options = LIBXML_NONET | LIBXML_NOENT | LIBXML_NOCDATA;
+        
+        // Disable external entity loading to prevent XXE attacks
+        $previous_entity_loader = libxml_disable_entity_loader( true );
         libxml_use_internal_errors( true );
         
         $dom = new DOMDocument();
-        $dom->loadXML( $content );
+        $dom->substituteEntities = false;
+        $dom->resolveExternals = false;
+        $dom->loadXML( $content, $libxml_options );
         
+        // Restore previous entity loader state
+        libxml_disable_entity_loader( $previous_entity_loader );
         libxml_clear_errors();
 
         // Find all symbol elements
@@ -288,7 +296,7 @@ class ACF_IcoMoon_Parser {
             ),
             'svg'  => array(
                 'extensions' => array( 'svg' ),
-                'mimes'      => array( 'image/svg+xml', 'text/plain', 'application/octet-stream', 'text/html' ),
+                'mimes'      => array( 'image/svg+xml', 'text/plain', 'application/octet-stream' ),
             ),
         );
 
@@ -364,6 +372,55 @@ class ACF_IcoMoon_Parser {
         delete_option( 'acf_icomoon_sprite_url' );
         delete_option( 'acf_icomoon_sprite_path' );
         return update_option( 'acf_icomoon_icons', array() );
+    }
+
+    /**
+     * Validate that a file path is within the WordPress uploads directory
+     *
+     * @param string $file_path The file path to validate
+     * @return true|WP_Error True if valid, WP_Error otherwise
+     */
+    public function validate_file_path( string $file_path ) {
+        // Get the uploads directory
+        $upload_dir = wp_upload_dir();
+        $base_dir = realpath( $upload_dir['basedir'] );
+        
+        // Get the real path of the file
+        $real_path = realpath( $file_path );
+        
+        // If realpath returns false, the file doesn't exist or path is invalid
+        if ( false === $real_path ) {
+            // For new files that don't exist yet, check the directory
+            $dir_path = dirname( $file_path );
+            $real_dir = realpath( $dir_path );
+            
+            if ( false === $real_dir ) {
+                return new WP_Error(
+                    'invalid_path',
+                    __( 'Invalid file path.', 'acf-icomoon' )
+                );
+            }
+            
+            // Check if the directory is within uploads
+            if ( strpos( $real_dir, $base_dir ) !== 0 ) {
+                return new WP_Error(
+                    'path_traversal',
+                    __( 'File path must be within the WordPress uploads directory.', 'acf-icomoon' )
+                );
+            }
+            
+            return true;
+        }
+        
+        // Check if the file is within the uploads directory
+        if ( strpos( $real_path, $base_dir ) !== 0 ) {
+            return new WP_Error(
+                'path_traversal',
+                __( 'File path must be within the WordPress uploads directory.', 'acf-icomoon' )
+            );
+        }
+        
+        return true;
     }
 }
 

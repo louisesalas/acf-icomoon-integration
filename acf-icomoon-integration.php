@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: ACF IcoMoon Integration
- * Plugin URI: https://example.com/acf-icomoon-integration
+ * Plugin URI: https://github.com/louisesalas/acf-icomoon-integration
  * Description: Adds IcoMoon icon picker support for Advanced Custom Fields. Upload your IcoMoon selection.json or SVG sprite and use icons in ACF fields.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Louise Salas
- * Author URI: https://github.com/louisesalas
+ * Author URI: https://louisesalas.netlify.app/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: acf-icomoon
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin constants
  */
-define( 'ACF_ICOMOON_VERSION', '1.0.1' );
+define( 'ACF_ICOMOON_VERSION', '1.0.2' );
 define( 'ACF_ICOMOON_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ACF_ICOMOON_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'ACF_ICOMOON_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
@@ -147,6 +147,13 @@ final class ACF_IcoMoon_Integration {
     public ?ACF_IcoMoon_Parser $parser = null;
 
     /**
+     * Sanitizer handler instance
+     *
+     * @var ACF_IcoMoon_Sanitizer|null
+     */
+    public ?ACF_IcoMoon_Sanitizer $sanitizer = null;
+
+    /**
      * Frontend handler instance
      *
      * @var ACF_IcoMoon_Frontend|null
@@ -179,9 +186,11 @@ final class ACF_IcoMoon_Integration {
      * @return void
      */
     private function load_dependencies(): void {
+        require_once ACF_ICOMOON_PLUGIN_DIR . 'includes/class-icomoon-sanitizer.php';
         require_once ACF_ICOMOON_PLUGIN_DIR . 'includes/class-icomoon-parser.php';
         require_once ACF_ICOMOON_PLUGIN_DIR . 'includes/class-icomoon-admin.php';
         require_once ACF_ICOMOON_PLUGIN_DIR . 'includes/class-icomoon-frontend.php';
+        require_once ACF_ICOMOON_PLUGIN_DIR . 'includes/helper-functions.php';
     }
 
     /**
@@ -203,12 +212,15 @@ final class ACF_IcoMoon_Integration {
      * @return void
      */
     public function init(): void {
+        // Initialize sanitizer
+        $this->sanitizer = new ACF_IcoMoon_Sanitizer();
+
         // Initialize parser
         $this->parser = new ACF_IcoMoon_Parser();
 
         // Initialize admin if in admin area
         if ( is_admin() ) {
-            $this->admin = new ACF_IcoMoon_Admin( $this->parser );
+            $this->admin = new ACF_IcoMoon_Admin( $this->parser, $this->sanitizer );
         }
 
         // Initialize frontend
@@ -267,51 +279,3 @@ function acf_icomoon(): ?ACF_IcoMoon_Integration {
 
 // Start the plugin only if ACF is available
 acf_icomoon();
-
-/**
- * Helper function to get an icon SVG
- *
- * @param string $icon_name The icon name (e.g., 'home' or 'icon-home')
- * @param array  $atts      Optional attributes (class, width, height, etc.)
- * @return string The SVG HTML
- */
-function icomoon_get_icon( string $icon_name, array $atts = array() ): string {
-    $instance = acf_icomoon();
-    
-    if ( ! $instance || ! $instance->frontend ) {
-        return '';
-    }
-    
-    return $instance->frontend->get_icon( $icon_name, $atts );
-}
-
-/**
- * Echo an icon SVG
- *
- * @param string $icon_name The icon name
- * @param array  $atts      Optional attributes
- * @return void
- */
-function icomoon_icon( string $icon_name, array $atts = array() ): void {
-    echo icomoon_get_icon( $icon_name, $atts );
-}
-
-/**
- * Check if IcoMoon icons are available
- *
- * @return bool
- */
-function icomoon_has_icons(): bool {
-    $icons = get_option( 'acf_icomoon_icons', array() );
-    return ! empty( $icons );
-}
-
-/**
- * Get all available icon names
- *
- * @return array
- */
-function icomoon_get_icons(): array {
-    return get_option( 'acf_icomoon_icons', array() );
-}
-
