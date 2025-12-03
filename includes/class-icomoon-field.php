@@ -26,7 +26,7 @@ class ACF_IcoMoon_Field extends acf_field {
     public function __construct() {
         // Field type settings
         $this->name     = 'icomoon_icon';
-        $this->label    = __( 'IcoMoon Icon Picker', 'acf-icomoon' );
+        $this->label    = __( 'IcoMoon Icon Picker', 'acf-icomoon-integration' );
         $this->category = 'content';
         $this->defaults = array(
             'return_format' => 'name',
@@ -46,22 +46,22 @@ class ACF_IcoMoon_Field extends acf_field {
     public function render_field_settings( $field ): void {
         // Return Format
         acf_render_field_setting( $field, array(
-            'label'        => __( 'Return Format', 'acf-icomoon' ),
-            'instructions' => __( 'Specify the format of the returned value.', 'acf-icomoon' ),
+            'label'        => __( 'Return Format', 'acf-icomoon-integration' ),
+            'instructions' => __( 'Specify the format of the returned value.', 'acf-icomoon-integration' ),
             'type'         => 'radio',
             'name'         => 'return_format',
             'layout'       => 'horizontal',
             'choices'      => array(
-                'name'     => __( 'Icon Name', 'acf-icomoon' ),
-                'svg'      => __( 'SVG Use Tag', 'acf-icomoon' ),
-                'class'    => __( 'CSS Class', 'acf-icomoon' ),
-                'array'    => __( 'Icon Array', 'acf-icomoon' ),
+                'name'     => __( 'Icon Name', 'acf-icomoon-integration' ),
+                'svg'      => __( 'SVG Use Tag', 'acf-icomoon-integration' ),
+                'class'    => __( 'CSS Class', 'acf-icomoon-integration' ),
+                'array'    => __( 'Icon Array', 'acf-icomoon-integration' ),
             ),
         ) );
 
         // Allow Null
         acf_render_field_setting( $field, array(
-            'label'        => __( 'Allow Null?', 'acf-icomoon' ),
+            'label'        => __( 'Allow Null?', 'acf-icomoon-integration' ),
             'instructions' => '',
             'name'         => 'allow_null',
             'type'         => 'true_false',
@@ -70,8 +70,8 @@ class ACF_IcoMoon_Field extends acf_field {
 
         // Multiple Selection
         acf_render_field_setting( $field, array(
-            'label'        => __( 'Select Multiple?', 'acf-icomoon' ),
-            'instructions' => __( 'Allow selection of multiple icons.', 'acf-icomoon' ),
+            'label'        => __( 'Select Multiple?', 'acf-icomoon-integration' ),
+            'instructions' => __( 'Allow selection of multiple icons.', 'acf-icomoon-integration' ),
             'name'         => 'multiple',
             'type'         => 'true_false',
             'ui'           => 1,
@@ -136,14 +136,14 @@ class ACF_IcoMoon_Field extends acf_field {
                                 </svg>
                             <?php endif; ?>
                             <span class="acf-icomoon-selected-name"><?php echo esc_html( $icon_name ); ?></span>
-                            <button type="button" class="acf-icomoon-remove" title="<?php esc_attr_e( 'Remove', 'acf-icomoon' ); ?>">&times;</button>
+                            <button type="button" class="acf-icomoon-remove" title="<?php esc_attr_e( 'Remove', 'acf-icomoon-integration' ); ?>">&times;</button>
                         </span>
                     <?php endforeach; ?>
                 </div>
                 <button type="button" class="button acf-icomoon-toggle">
                     <?php echo empty( $selected_icons ) || empty( $selected_icons[0] ) 
-                        ? esc_html__( 'Select Icon', 'acf-icomoon' ) 
-                        : esc_html__( 'Change Icon', 'acf-icomoon' ); ?>
+                        ? esc_html__( 'Select Icon', 'acf-icomoon-integration' ) 
+                        : esc_html__( 'Change Icon', 'acf-icomoon-integration' ); ?>
                 </button>
             </div>
 
@@ -151,11 +151,11 @@ class ACF_IcoMoon_Field extends acf_field {
             <div class="acf-icomoon-picker" style="display: none;">
                 <?php if ( empty( $icons ) ) : ?>
                     <div class="acf-icomoon-no-icons">
-                        <p><?php esc_html_e( 'No icons available.', 'acf-icomoon' ); ?></p>
+                        <p><?php esc_html_e( 'No icons available.', 'acf-icomoon-integration' ); ?></p>
                         <?php if ( current_user_can( 'manage_options' ) ) : ?>
                             <p>
                                 <a href="<?php echo esc_url( admin_url( 'options-general.php?page=acf-icomoon-icons' ) ); ?>">
-                                    <?php esc_html_e( 'Upload IcoMoon icons', 'acf-icomoon' ); ?>
+                                    <?php esc_html_e( 'Upload IcoMoon icons', 'acf-icomoon-integration' ); ?>
                                 </a>
                             </p>
                         <?php endif; ?>
@@ -165,7 +165,7 @@ class ACF_IcoMoon_Field extends acf_field {
                     <div class="acf-icomoon-picker-search">
                         <input type="text" 
                                class="acf-icomoon-search-input" 
-                               placeholder="<?php esc_attr_e( 'Search icons...', 'acf-icomoon' ); ?>">
+                               placeholder="<?php esc_attr_e( 'Search icons...', 'acf-icomoon-integration' ); ?>">
                     </div>
 
                     <!-- Icons Grid -->
@@ -189,18 +189,18 @@ class ACF_IcoMoon_Field extends acf_field {
                     </div>
 
                     <p class="acf-icomoon-picker-no-results" style="display: none;">
-                        <?php esc_html_e( 'No icons found.', 'acf-icomoon' ); ?>
+                        <?php esc_html_e( 'No icons found.', 'acf-icomoon-integration' ); ?>
                     </p>
 
                     <!-- Actions -->
                     <div class="acf-icomoon-picker-actions">
                         <?php if ( ! empty( $field['allow_null'] ) ) : ?>
                             <button type="button" class="button acf-icomoon-clear-selection">
-                                <?php esc_html_e( 'Clear Selection', 'acf-icomoon' ); ?>
+                                <?php esc_html_e( 'Clear Selection', 'acf-icomoon-integration' ); ?>
                             </button>
                         <?php endif; ?>
                         <button type="button" class="button button-primary acf-icomoon-close">
-                            <?php esc_html_e( 'Done', 'acf-icomoon' ); ?>
+                            <?php esc_html_e( 'Done', 'acf-icomoon-integration' ); ?>
                         </button>
                     </div>
                 <?php endif; ?>
@@ -293,7 +293,7 @@ class ACF_IcoMoon_Field extends acf_field {
     public function validate_value( $valid, $value, $field, $input ) {
         // Check required
         if ( empty( $field['allow_null'] ) && empty( $value ) ) {
-            return __( 'Please select an icon.', 'acf-icomoon' );
+            return __( 'Please select an icon.', 'acf-icomoon-integration' );
         }
 
         return $valid;
@@ -339,14 +339,14 @@ class ACF_IcoMoon_Field extends acf_field {
                 'spriteUrl' => get_option( 'acf_icomoon_sprite_url', '' ),
                 'icons'     => get_option( 'acf_icomoon_icons', array() ),
                 'strings'   => array(
-                    'selectIcon'   => __( 'Select Icon', 'acf-icomoon' ),
-                    'changeIcon'   => __( 'Change Icon', 'acf-icomoon' ),
-                    'confirmClear' => __( 'Are you sure you want to remove all icons? This cannot be undone.', 'acf-icomoon' ),
-                    'clearing'     => __( 'Clearing...', 'acf-icomoon' ),
-                    'cleared'      => __( 'Icons cleared successfully.', 'acf-icomoon' ),
-                    'error'        => __( 'An error occurred. Please try again.', 'acf-icomoon' ),
-                    'search'       => __( 'Search icons...', 'acf-icomoon' ),
-                    'noResults'    => __( 'No icons found.', 'acf-icomoon' ),
+                    'selectIcon'   => __( 'Select Icon', 'acf-icomoon-integration' ),
+                    'changeIcon'   => __( 'Change Icon', 'acf-icomoon-integration' ),
+                    'confirmClear' => __( 'Are you sure you want to remove all icons? This cannot be undone.', 'acf-icomoon-integration' ),
+                    'clearing'     => __( 'Clearing...', 'acf-icomoon-integration' ),
+                    'cleared'      => __( 'Icons cleared successfully.', 'acf-icomoon-integration' ),
+                    'error'        => __( 'An error occurred. Please try again.', 'acf-icomoon-integration' ),
+                    'search'       => __( 'Search icons...', 'acf-icomoon-integration' ),
+                    'noResults'    => __( 'No icons found.', 'acf-icomoon-integration' ),
                 ),
             ) );
             self::$scripts_localized = true;

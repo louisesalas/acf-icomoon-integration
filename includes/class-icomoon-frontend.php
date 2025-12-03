@@ -54,7 +54,7 @@ class ACF_IcoMoon_Frontend {
      */
     public function enqueue_frontend_styles(): void {
         // Only enqueue if icons exist
-        if ( ! icomoon_has_icons() ) {
+        if ( ! acf_icomoon_has_icons() ) {
             return;
         }
 
@@ -62,7 +62,10 @@ class ACF_IcoMoon_Frontend {
         $css = $this->get_icon_css();
         
         if ( ! empty( $css ) ) {
-            wp_register_style( 'acf-icomoon-icons', false );
+            // Use plugin version if available, otherwise fall back to timestamp of last icon update
+            $version = defined( 'ACF_ICOMOON_VERSION' ) ? ACF_ICOMOON_VERSION : get_option( 'acf_icomoon_last_update', '1.0.0' );
+            
+            wp_register_style( 'acf-icomoon-icons', false, array(), $version );
             wp_enqueue_style( 'acf-icomoon-icons' );
             wp_add_inline_style( 'acf-icomoon-icons', $css );
         }

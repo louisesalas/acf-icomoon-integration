@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param array  $atts      Optional attributes (class, width, height, etc.)
  * @return string The SVG HTML
  */
-function icomoon_get_icon( string $icon_name, array $atts = array() ): string {
+function acf_icomoon_get_icon( string $icon_name, array $atts = array() ): string {
     $instance = acf_icomoon();
     
     if ( ! $instance || ! $instance->frontend ) {
@@ -38,9 +38,9 @@ function icomoon_get_icon( string $icon_name, array $atts = array() ): string {
  * @param array  $atts      Optional attributes
  * @return void
  */
-function icomoon_icon( string $icon_name, array $atts = array() ): void {
+function acf_icomoon_icon( string $icon_name, array $atts = array() ): void {
     // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-    echo icomoon_get_icon( $icon_name, $atts );
+    echo acf_icomoon_get_icon( $icon_name, $atts );
 }
 
 /**
@@ -48,7 +48,7 @@ function icomoon_icon( string $icon_name, array $atts = array() ): void {
  *
  * @return bool
  */
-function icomoon_has_icons(): bool {
+function acf_icomoon_has_icons(): bool {
     $icons = get_option( 'acf_icomoon_icons', array() );
     return ! empty( $icons );
 }
@@ -58,7 +58,7 @@ function icomoon_has_icons(): bool {
  *
  * @return array
  */
-function icomoon_get_icons(): array {
+function acf_icomoon_get_icons(): array {
     return get_option( 'acf_icomoon_icons', array() );
 }
 
