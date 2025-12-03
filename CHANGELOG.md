@@ -69,7 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Visual icon picker with search functionality
 - Multiple return formats: icon name, SVG use tag, CSS class, or full array
 - Single and multiple icon selection support
-- Helper functions: `icomoon_icon()`, `icomoon_get_icon()`, `icomoon_has_icons()`, `icomoon_get_icons()`
+- Helper functions: `acf_icomoon_icon()`, `acf_icomoon_get_icon()`, `acf_icomoon_has_icons()`, `acf_icomoon_get_icons()`
 - Admin settings page under Settings > IcoMoon Icons
 - Inline SVG sprite output for frontend rendering
 - ACF dependency check with admin notice

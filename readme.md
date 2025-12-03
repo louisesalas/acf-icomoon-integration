@@ -2,9 +2,9 @@
 Contributors: Louise Salas
 Tags: acf, icomoon, icons, svg, advanced custom fields
 Requires at least: 5.8
-Tested up to: 6.4
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,15 +34,15 @@ ACF IcoMoon Integration allows you to use your custom IcoMoon icon sets within A
 
 ```php
 // Output an icon
-icomoon_icon( 'home' );
+acf_icomoon_icon( 'home' );
 
 // Get icon as string
-$icon = icomoon_get_icon( 'home', ['class' => 'my-icon'] );
+$icon = acf_icomoon_get_icon( 'home', ['class' => 'my-icon'] );
 
 // Using with ACF
 $icon_name = get_field( 'my_icon_field' );
 if ( $icon_name ) {
-    icomoon_icon( $icon_name );
+    acf_icomoon_icon( $icon_name );
 }
 ```
 

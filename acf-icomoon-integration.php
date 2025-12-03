@@ -8,7 +8,7 @@
  * Author URI: https://louisesalas.netlify.app/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: acf-icomoon
+ * Text Domain: acf-icomoon-integration
  * Domain Path: /languages
  * Requires at least: 5.8
  * Requires PHP: 7.4
@@ -62,8 +62,8 @@ function acf_icomoon_admin_notice_missing_acf(): void {
     $class = 'notice notice-error is-dismissible';
     $message = sprintf(
         /* translators: %s: Plugin name */
-        __( 'The plugin "%s" requires Advanced Custom Fields (ACF) to be installed and activated. Please install and activate ACF to use this plugin.', 'acf-icomoon' ),
-        __( 'ACF IcoMoon Integration', 'acf-icomoon' )
+        __( 'The plugin "%s" requires Advanced Custom Fields (ACF) to be installed and activated. Please install and activate ACF to use this plugin.', 'acf-icomoon-integration' ),
+        __( 'ACF IcoMoon Integration', 'acf-icomoon-integration' )
     );
 
     printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
@@ -82,8 +82,8 @@ function acf_icomoon_activate(): void {
     if ( ! acf_icomoon_is_acf_active() ) {
         deactivate_plugins( ACF_ICOMOON_PLUGIN_BASENAME );
         wp_die(
-            esc_html__( 'This plugin requires Advanced Custom Fields (ACF) to be installed and activated.', 'acf-icomoon' ),
-            esc_html__( 'Plugin Activation Error', 'acf-icomoon' ),
+            esc_html__( 'This plugin requires Advanced Custom Fields (ACF) to be installed and activated.', 'acf-icomoon-integration' ),
+            esc_html__( 'Plugin Activation Error', 'acf-icomoon-integration' ),
             array( 'back_link' => true )
         );
     }
@@ -200,7 +200,6 @@ final class ACF_IcoMoon_Integration {
      */
     private function init_hooks(): void {
         add_action( 'plugins_loaded', array( $this, 'init' ) );
-        add_action( 'init', array( $this, 'load_textdomain' ) );
         
         // Note: Activation and deactivation hooks are registered outside the class
         // to ensure they work even when ACF is not installed
@@ -228,19 +227,6 @@ final class ACF_IcoMoon_Integration {
 
         // Load ACF field type when ACF is ready
         add_action( 'acf/include_field_types', array( $this, 'include_field_types' ) );
-    }
-
-    /**
-     * Load plugin text domain for translations
-     *
-     * @return void
-     */
-    public function load_textdomain(): void {
-        load_plugin_textdomain(
-            'acf-icomoon',
-            false,
-            dirname( ACF_ICOMOON_PLUGIN_BASENAME ) . '/languages'
-        );
     }
 
     /**

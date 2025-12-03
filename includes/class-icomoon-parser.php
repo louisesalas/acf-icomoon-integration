@@ -30,7 +30,7 @@ class ACF_IcoMoon_Parser {
         if ( ! file_exists( $file_path ) ) {
             return new WP_Error( 
                 'file_not_found', 
-                __( 'The selection.json file was not found.', 'acf-icomoon' ) 
+                __( 'The selection.json file was not found.', 'acf-icomoon-integration' ) 
             );
         }
 
@@ -39,7 +39,7 @@ class ACF_IcoMoon_Parser {
         if ( false === $content ) {
             return new WP_Error( 
                 'file_read_error', 
-                __( 'Could not read the selection.json file.', 'acf-icomoon' ) 
+                __( 'Could not read the selection.json file.', 'acf-icomoon-integration' ) 
             );
         }
 
@@ -50,7 +50,7 @@ class ACF_IcoMoon_Parser {
                 'json_parse_error', 
                 sprintf( 
                     /* translators: %s: JSON error message */
-                    __( 'JSON parse error: %s', 'acf-icomoon' ), 
+                    __( 'JSON parse error: %s', 'acf-icomoon-integration' ), 
                     json_last_error_msg() 
                 ) 
             );
@@ -106,7 +106,7 @@ class ACF_IcoMoon_Parser {
         if ( ! file_exists( $file_path ) ) {
             return new WP_Error( 
                 'file_not_found', 
-                __( 'The SVG sprite file was not found.', 'acf-icomoon' ) 
+                __( 'The SVG sprite file was not found.', 'acf-icomoon-integration' ) 
             );
         }
 
@@ -115,7 +115,7 @@ class ACF_IcoMoon_Parser {
         if ( false === $content ) {
             return new WP_Error( 
                 'file_read_error', 
-                __( 'Could not read the SVG sprite file.', 'acf-icomoon' ) 
+                __( 'Could not read the SVG sprite file.', 'acf-icomoon-integration' ) 
             );
         }
 
@@ -210,7 +210,7 @@ class ACF_IcoMoon_Parser {
         if ( ! file_exists( $file_path ) ) {
             return new WP_Error( 
                 'file_not_found', 
-                __( 'The selection.json file was not found.', 'acf-icomoon' ) 
+                __( 'The selection.json file was not found.', 'acf-icomoon-integration' ) 
             );
         }
 
@@ -226,7 +226,7 @@ class ACF_IcoMoon_Parser {
         if ( empty( $svg_paths ) ) {
             return new WP_Error( 
                 'no_paths', 
-                __( 'No SVG paths found in selection.json.', 'acf-icomoon' ) 
+                __( 'No SVG paths found in selection.json.', 'acf-icomoon-integration' ) 
             );
         }
 
@@ -284,7 +284,7 @@ class ACF_IcoMoon_Parser {
         if ( $file['error'] !== UPLOAD_ERR_OK ) {
             return new WP_Error( 
                 'upload_error', 
-                __( 'There was an error uploading the file.', 'acf-icomoon' ) 
+                __( 'There was an error uploading the file.', 'acf-icomoon-integration' ) 
             );
         }
 
@@ -303,7 +303,7 @@ class ACF_IcoMoon_Parser {
         if ( ! isset( $allowed_types[ $type ] ) ) {
             return new WP_Error( 
                 'invalid_type', 
-                __( 'Invalid file type specified.', 'acf-icomoon' ) 
+                __( 'Invalid file type specified.', 'acf-icomoon-integration' ) 
             );
         }
 
@@ -315,7 +315,7 @@ class ACF_IcoMoon_Parser {
                 'invalid_type', 
                 sprintf(
                     /* translators: %s: file extension */
-                    __( 'Please upload a valid .%s file.', 'acf-icomoon' ),
+                    __( 'Please upload a valid .%s file.', 'acf-icomoon-integration' ),
                     $allowed_types[ $type ]['extensions'][0]
                 )
             );
@@ -328,7 +328,7 @@ class ACF_IcoMoon_Parser {
         if ( ! in_array( $mime_type, $allowed_types[ $type ]['mimes'], true ) ) {
             return new WP_Error( 
                 'invalid_mime', 
-                __( 'The file MIME type is not allowed.', 'acf-icomoon' ) 
+                __( 'The file MIME type is not allowed.', 'acf-icomoon-integration' ) 
             );
         }
 
@@ -337,7 +337,7 @@ class ACF_IcoMoon_Parser {
         if ( $file['size'] > $max_size ) {
             return new WP_Error( 
                 'file_too_large', 
-                __( 'The file is too large. Maximum size is 5MB.', 'acf-icomoon' ) 
+                __( 'The file is too large. Maximum size is 5MB.', 'acf-icomoon-integration' ) 
             );
         }
 
@@ -397,7 +397,7 @@ class ACF_IcoMoon_Parser {
             if ( false === $real_dir ) {
                 return new WP_Error(
                     'invalid_path',
-                    __( 'Invalid file path.', 'acf-icomoon' )
+                    __( 'Invalid file path.', 'acf-icomoon-integration' )
                 );
             }
             
@@ -405,7 +405,7 @@ class ACF_IcoMoon_Parser {
             if ( strpos( $real_dir, $base_dir ) !== 0 ) {
                 return new WP_Error(
                     'path_traversal',
-                    __( 'File path must be within the WordPress uploads directory.', 'acf-icomoon' )
+                    __( 'File path must be within the WordPress uploads directory.', 'acf-icomoon-integration' )
                 );
             }
             
@@ -416,7 +416,7 @@ class ACF_IcoMoon_Parser {
         if ( strpos( $real_path, $base_dir ) !== 0 ) {
             return new WP_Error(
                 'path_traversal',
-                __( 'File path must be within the WordPress uploads directory.', 'acf-icomoon' )
+                __( 'File path must be within the WordPress uploads directory.', 'acf-icomoon-integration' )
             );
         }
         
