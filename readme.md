@@ -4,7 +4,7 @@ Tags: acf, icomoon, icons, svg, advanced custom fields, icon picker
 Requires at least: 5.8
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,6 +47,10 @@ if ( $icon_name ) {
 ```
 
 == Changelog ==
+
+= 1.0.3 =
+* Renamed plugin to "Icon Picker using IcoMoon for ACF" for trademark compliance
+* Updated text domain to "icon-picker-icomoon-for-acf"
 
 = 1.0.1 =
 * Security: Added `wp_unslash()` for proper nonce verification

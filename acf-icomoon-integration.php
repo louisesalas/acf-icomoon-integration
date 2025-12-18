@@ -3,7 +3,7 @@
  * Plugin Name: Icon Picker using IcoMoon for ACF
  * Plugin URI: https://github.com/louisesalas/icon-picker-icomoon-for-acf
  * Description: Adds IcoMoon icon picker support for Advanced Custom Fields. Upload your IcoMoon selection.json or SVG sprite and use icons in ACF fields.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: Louise Salas
  * Author URI: https://louisesalas.netlify.app/
  * License: GPL v2 or later
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin constants
  */
-define( 'ACF_ICOMOON_VERSION', '1.0.2' );
+define( 'ACF_ICOMOON_VERSION', '1.0.3' );
 define( 'ACF_ICOMOON_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ACF_ICOMOON_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'ACF_ICOMOON_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
