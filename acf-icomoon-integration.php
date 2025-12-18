@@ -1,14 +1,14 @@
 <?php
 /**
- * Plugin Name: ACF IcoMoon Integration
- * Plugin URI: https://github.com/louisesalas/acf-icomoon-integration
+ * Plugin Name: Icon Picker using IcoMoon for ACF
+ * Plugin URI: https://github.com/louisesalas/icon-picker-icomoon-for-acf
  * Description: Adds IcoMoon icon picker support for Advanced Custom Fields. Upload your IcoMoon selection.json or SVG sprite and use icons in ACF fields.
  * Version: 1.0.2
  * Author: Louise Salas
  * Author URI: https://louisesalas.netlify.app/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: acf-icomoon-integration
+ * Text Domain: icon-picker-icomoon-for-acf
  * Domain Path: /languages
  * Requires at least: 5.8
  * Requires PHP: 7.4
@@ -62,8 +62,8 @@ function acf_icomoon_admin_notice_missing_acf(): void {
     $class = 'notice notice-error is-dismissible';
     $message = sprintf(
         /* translators: %s: Plugin name */
-        __( 'The plugin "%s" requires Advanced Custom Fields (ACF) to be installed and activated. Please install and activate ACF to use this plugin.', 'acf-icomoon-integration' ),
-        __( 'ACF IcoMoon Integration', 'acf-icomoon-integration' )
+        __( 'The plugin "%s" requires Advanced Custom Fields (ACF) to be installed and activated. Please install and activate ACF to use this plugin.', 'icon-picker-icomoon-for-acf' ),
+        __( 'Icon Picker using IcoMoon for ACF', 'icon-picker-icomoon-for-acf' )
     );
 
     printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
@@ -82,8 +82,8 @@ function acf_icomoon_activate(): void {
     if ( ! acf_icomoon_is_acf_active() ) {
         deactivate_plugins( ACF_ICOMOON_PLUGIN_BASENAME );
         wp_die(
-            esc_html__( 'This plugin requires Advanced Custom Fields (ACF) to be installed and activated.', 'acf-icomoon-integration' ),
-            esc_html__( 'Plugin Activation Error', 'acf-icomoon-integration' ),
+            esc_html__( 'This plugin requires Advanced Custom Fields (ACF) to be installed and activated.', 'icon-picker-icomoon-for-acf' ),
+            esc_html__( 'Plugin Activation Error', 'icon-picker-icomoon-for-acf' ),
             array( 'back_link' => true )
         );
     }

@@ -121,7 +121,7 @@ class ACF_IcoMoon_Sanitizer {
      */
     public function sanitize_svg( string $svg_content ) {
         if ( empty( $svg_content ) ) {
-            return new WP_Error( 'empty_svg', __( 'SVG content is empty.', 'acf-icomoon-integration' ) );
+            return new WP_Error( 'empty_svg', __( 'SVG content is empty.', 'icon-picker-icomoon-for-acf' ) );
         }
 
         // Remove any content before the opening SVG tag and after closing SVG tag
@@ -131,7 +131,7 @@ class ACF_IcoMoon_Sanitizer {
         if ( preg_match( '/<!DOCTYPE/i', $svg_content ) ) {
             return new WP_Error( 
                 'doctype_not_allowed', 
-                __( 'SVG files with DOCTYPE declarations are not allowed for security reasons.', 'acf-icomoon-integration' ) 
+                __( 'SVG files with DOCTYPE declarations are not allowed for security reasons.', 'icon-picker-icomoon-for-acf' ) 
             );
         }
 
@@ -139,7 +139,7 @@ class ACF_IcoMoon_Sanitizer {
         if ( preg_match( '/<!ENTITY/i', $svg_content ) ) {
             return new WP_Error( 
                 'entity_not_allowed', 
-                __( 'SVG files with ENTITY declarations are not allowed for security reasons.', 'acf-icomoon-integration' ) 
+                __( 'SVG files with ENTITY declarations are not allowed for security reasons.', 'icon-picker-icomoon-for-acf' ) 
             );
         }
 
@@ -166,7 +166,7 @@ class ACF_IcoMoon_Sanitizer {
             
             return new WP_Error( 
                 'invalid_svg', 
-                __( 'Invalid SVG file. Could not parse XML content.', 'acf-icomoon-integration' ) 
+                __( 'Invalid SVG file. Could not parse XML content.', 'icon-picker-icomoon-for-acf' ) 
             );
         }
 
@@ -181,7 +181,7 @@ class ACF_IcoMoon_Sanitizer {
         if ( false === $sanitized ) {
             return new WP_Error( 
                 'sanitization_failed', 
-                __( 'Failed to sanitize SVG content.', 'acf-icomoon-integration' ) 
+                __( 'Failed to sanitize SVG content.', 'icon-picker-icomoon-for-acf' ) 
             );
         }
 
@@ -330,13 +330,13 @@ class ACF_IcoMoon_Sanitizer {
      */
     public function validate_svg_file( string $file_path ) {
         if ( ! file_exists( $file_path ) ) {
-            return new WP_Error( 'file_not_found', __( 'File not found.', 'acf-icomoon-integration' ) );
+            return new WP_Error( 'file_not_found', __( 'File not found.', 'icon-picker-icomoon-for-acf' ) );
         }
 
         $content = file_get_contents( $file_path );
         
         if ( false === $content ) {
-            return new WP_Error( 'file_read_error', __( 'Could not read file.', 'acf-icomoon-integration' ) );
+            return new WP_Error( 'file_read_error', __( 'Could not read file.', 'icon-picker-icomoon-for-acf' ) );
         }
 
         // Check file size (already checked in parser, but double-check)
@@ -346,7 +346,7 @@ class ACF_IcoMoon_Sanitizer {
         if ( $size > $max_size ) {
             return new WP_Error( 
                 'file_too_large', 
-                __( 'SVG file is too large. Maximum size is 5MB.', 'acf-icomoon-integration' ) 
+                __( 'SVG file is too large. Maximum size is 5MB.', 'icon-picker-icomoon-for-acf' ) 
             );
         }
 
@@ -354,7 +354,7 @@ class ACF_IcoMoon_Sanitizer {
         if ( ! preg_match( '/<svg[^>]*>/i', $content ) ) {
             return new WP_Error( 
                 'not_svg', 
-                __( 'File does not appear to be a valid SVG.', 'acf-icomoon-integration' ) 
+                __( 'File does not appear to be a valid SVG.', 'icon-picker-icomoon-for-acf' ) 
             );
         }
 
@@ -362,7 +362,7 @@ class ACF_IcoMoon_Sanitizer {
         if ( preg_match( '/<script/i', $content ) ) {
             return new WP_Error( 
                 'script_not_allowed', 
-                __( 'SVG files containing script tags are not allowed.', 'acf-icomoon-integration' ) 
+                __( 'SVG files containing script tags are not allowed.', 'icon-picker-icomoon-for-acf' ) 
             );
         }
 

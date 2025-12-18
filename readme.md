@@ -1,6 +1,6 @@
-=== ACF IcoMoon Integration ===
+=== Icon Picker using IcoMoon for ACF ===
 Contributors: Louise Salas
-Tags: acf, icomoon, icons, svg, advanced custom fields
+Tags: acf, icomoon, icons, svg, advanced custom fields, icon picker
 Requires at least: 5.8
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -12,7 +12,7 @@ Adds IcoMoon icon picker support for Advanced Custom Fields.
 
 == Description ==
 
-ACF IcoMoon Integration allows you to use your custom IcoMoon icon sets within Advanced Custom Fields.
+Icon Picker using IcoMoon for ACF allows you to use your custom IcoMoon icon sets within Advanced Custom Fields.
 
 **Features:**
 
@@ -25,7 +25,7 @@ ACF IcoMoon Integration allows you to use your custom IcoMoon icon sets within A
 
 == Installation ==
 
-1. Upload the plugin files to `/wp-content/plugins/acf-icomoon-integration/`
+1. Upload the plugin files to `/wp-content/plugins/icon-picker-icomoon-for-acf/`
 2. Activate the plugin through the 'Plugins' screen in WordPress
 3. Go to Settings > IcoMoon Icons
 4. Upload your IcoMoon selection.json or SVG sprite file
